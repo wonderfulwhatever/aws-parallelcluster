@@ -20,7 +20,7 @@ from tests.pcluster.config.defaults import DefaultCfnParams, DefaultDict
 @pytest.mark.parametrize(
     "cfn_params_dict, expected_section_dict",
     [
-        ({}, utils.merge_dicts(DefaultDict["cluster"].value, {"additional_iam_policies": []}),),
+        ({}, utils.merge_dicts(DefaultDict["cluster"].value, {"additional_iam_policies": [], "architecture": None}),),
         (
             DefaultCfnParams["cluster"].value,
             utils.merge_dicts(
@@ -78,16 +78,26 @@ def test_cluster_section_from_cfn(mocker, cfn_params_dict, expected_section_dict
     "config_parser_dict, expected_dict_params, expected_message",
     [
         # default
-        ({"cluster default": {}}, {"additional_iam_policies": [], "scheduler": "slurm", "base_os": "alinux2"}, None),
+        (
+            {"cluster default": {}},
+            {"additional_iam_policies": [], "architecture": None, "scheduler": "slurm", "base_os": "alinux2"},
+            None,
+        ),
         # right value
         (
             {"cluster default": {"key_name": "test"}},
-            {"key_name": "test", "additional_iam_policies": [], "scheduler": "slurm", "base_os": "alinux2"},
+            {
+                "key_name": "test",
+                "additional_iam_policies": [],
+                "architecture": None,
+                "scheduler": "slurm",
+                "base_os": "alinux2",
+            },
             None,
         ),
         (
             {"cluster default": {"base_os": "alinux"}},
-            {"base_os": "alinux", "additional_iam_policies": [], "scheduler": "slurm"},
+            {"base_os": "alinux", "additional_iam_policies": [], "architecture": None, "scheduler": "slurm"},
             None,
         ),
         # invalid value

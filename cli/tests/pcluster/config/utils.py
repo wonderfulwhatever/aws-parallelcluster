@@ -279,7 +279,14 @@ def assert_section_to_cfn(mocker, section_definition, section_dict, expected_cfn
     section = section_type(section_definition, pcluster_config)
     for param_key, param_value in section_dict.items():
         param_definition, param_type = get_cfnparam_definition(section_definition, param_key)
-        param = param_type(section_definition.get("key"), "default", param_key, param_definition, pcluster_config)
+        param = param_type(
+            section_definition.get("key"),
+            "default",
+            param_key,
+            param_definition,
+            pcluster_config,
+            owner_section=section,
+        )
         param.value = param_value
         section.add_param(param)
     pcluster_config.add_section(section)
